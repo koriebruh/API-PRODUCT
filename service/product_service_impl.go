@@ -30,6 +30,7 @@ func (service ProductServiceImpl) Create(gin *gin.Context, createReq web.Product
 			Name:          createReq.Name,
 			PurchasePrice: createReq.PurchasePrice,
 			SellingPrice:  createReq.SellingPrice,
+			Stock:         createReq.Stock,
 		}
 
 		// if err
@@ -39,11 +40,13 @@ func (service ProductServiceImpl) Create(gin *gin.Context, createReq web.Product
 			return nil
 		}
 
-		// if success
+		// if success, membuat data yg boleh di terima client
+		formatData := web.NewProductLimitData(product)
+
 		response = web.ProductResponse{
 			Code:   http.StatusOK,
 			Status: "OK",
-			Data:   product,
+			Data:   formatData,
 		}
 		return nil
 	})
@@ -96,10 +99,11 @@ func (service ProductServiceImpl) Update(ctx *gin.Context, updateReq web.Product
 		}
 
 		//DO UPDATE DATA
-		updatedProduct := domain.Product{
+		updatedProduct := domain.Product{ ///
 			Name:          updateReq.Name,
 			PurchasePrice: updateReq.PurchasePrice,
 			SellingPrice:  updateReq.SellingPrice,
+			Stock:         updateReq.Stock,
 		}
 
 		_, err = service.ProductRepository.Update(tx, &updatedProduct, product.Id)
@@ -108,11 +112,13 @@ func (service ProductServiceImpl) Update(ctx *gin.Context, updateReq web.Product
 			return err
 		}
 
-		// PREPARE RESPONSE
+		// PREPARE RESPONSE,
+		formatData := web.NewProductLimitData(product)
+
 		response = web.ProductResponse{
 			Code:   http.StatusOK,
 			Status: "OK",
-			Data:   updatedProduct,
+			Data:   formatData,
 		}
 		return nil
 	})
@@ -135,9 +141,11 @@ func (service ProductServiceImpl) FindById(ctx *gin.Context, productId int) web.
 			return nil
 		}
 
-		/// RESPONSE KETIKA BENAR
+		/// RESPONSE KETIKA BENAR, foramtin response
+		formatData := web.NewProductLimitData(product)
+
 		response = web.ProductResponse{
-			Code: http.StatusOK, Status: "OK", Data: product}
+			Code: http.StatusOK, Status: "OK", Data: formatData}
 		return nil
 	})
 
@@ -163,6 +171,7 @@ func (service ProductServiceImpl) FindAll(ctx *gin.Context) web.ProductResponse 
 		}
 
 		// OUTPUT KETIKA BENAR
+
 		response = web.ProductResponse{
 			Code: http.StatusOK, Status: "OK", Data: products}
 		return nil

@@ -18,8 +18,6 @@ func InitDB() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
-	//db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-	//})
 
 	if err != nil {
 		panic(errors.New("Failed Connected into data base"))
