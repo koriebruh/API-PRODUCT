@@ -2,7 +2,7 @@ package web
 
 // REesponse RESPONSE KE CLIENT
 
-type ProductResponse struct {
+type WebResponse struct {
 	Code   int
 	Status string
 	Data   interface{}

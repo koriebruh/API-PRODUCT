@@ -1,13 +1,13 @@
 ### GET usage Id Parm
-GET http://localhost:8080/products/3
+GET http://localhost:8080/api/products/3
 Accept: application/json
 
 ### GET all Products
-GET http://localhost:8080/products
+GET http://localhost:8080/api/products
 Accept: application/json
 
 ### Create Products
-POST http://localhost:8080/products
+POST http://localhost:8080/api/products
 Accept: application/json
 Content-Type: application/json
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### UPDATE Products usage Id Parm
-PUT http://localhost:8080/products/15
+PUT http://localhost:8080/api/products/15
 Accept: application/json
 Content-Type: application/json
 
@@ -31,5 +31,5 @@ Content-Type: application/json
 }
 
 ### DELETE Products usage Id Parm
-PUT http://localhost:8080/products/8
+PUT http://localhost:8080/api/products/8
 Accept: application/json

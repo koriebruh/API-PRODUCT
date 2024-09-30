@@ -8,15 +8,15 @@ import (
 // product create ama update filed sama makanya buat 1 saja
 
 // Fungsi untuk memvalidasi data input produk
-func validateProductRequest(productReq web.ProductCreate) *web.ProductResponse {
+func validateProductRequest(productReq web.ProductCreate) *web.WebResponse {
 	if productReq.Name == "" {
-		return &web.ProductResponse{Code: http.StatusBadRequest, Status: "BAD REQUEST", Data: nil}
+		return &web.WebResponse{Code: http.StatusBadRequest, Status: "BAD REQUEST", Data: nil}
 	}
 	if productReq.PurchasePrice < 0 {
-		return &web.ProductResponse{Code: http.StatusBadRequest, Status: "BAD REQUEST", Data: nil}
+		return &web.WebResponse{Code: http.StatusBadRequest, Status: "BAD REQUEST", Data: nil}
 	}
 	if productReq.SellingPrice < 0 {
-		return &web.ProductResponse{Code: http.StatusBadRequest, Status: "BAD REQUEST", Data: nil}
+		return &web.WebResponse{Code: http.StatusBadRequest, Status: "BAD REQUEST", Data: nil}
 	}
 
 	return nil // Tidak ada kesalahan, validasi berhasil

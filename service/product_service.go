@@ -6,9 +6,9 @@ import (
 )
 
 type ProductService interface {
-	Create(ctx *gin.Context, createReq web.ProductCreate) web.ProductResponse
-	Delete(ctx *gin.Context, productId int) web.ProductResponse
-	Update(ctx *gin.Context, updateReq web.ProductUpdate, productId int) web.ProductResponse
-	FindById(ctx *gin.Context, productId int) web.ProductResponse
-	FindAll(ctx *gin.Context) web.ProductResponse
+	Create(ctx *gin.Context, createReq web.ProductCreate) web.WebResponse
+	Delete(ctx *gin.Context, productId int) web.WebResponse
+	Update(ctx *gin.Context, updateReq web.ProductUpdate, productId int) web.WebResponse
+	FindById(ctx *gin.Context, productId int) web.WebResponse
+	FindAll(ctx *gin.Context) web.WebResponse
 }

@@ -39,11 +39,11 @@ func main() {
 
 	router := gin.Default()
 
-	router.POST("/products", productController.Create)
-	router.GET("/products", productController.FindAll)
-	router.GET("/products/:id", productController.FindById)
-	router.PUT("/products/:id", productController.Update)
-	router.DELETE("/products/:id", productController.Delete)
+	router.POST("api/products", productController.Create)
+	router.GET("api/products", productController.FindAll)
+	router.GET("api/products/:id", productController.FindById)
+	router.PUT("api/products/:id", productController.Update)
+	router.DELETE("api/products/:id", productController.Delete)
 
 	if err := router.Run(":8080"); err != nil {
 		log.Fatal(err)
