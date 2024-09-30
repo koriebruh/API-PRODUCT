@@ -1,0 +1,12 @@
+package repository
+
+import (
+	"gorm.io/gorm"
+	"jamal/api/models/domain"
+)
+
+type AuthRepository interface {
+	Register(tx *gorm.DB, user domain.User) error
+	Login(tx *gorm.DB, user domain.User) error
+	Logout(tx *gorm.DB, user domain.User) error
+}

@@ -85,7 +85,7 @@ func (controller ProductControllerImpl) FindById(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "BAD REQUEST",
-			"message": "Invalid course ID",
+			"message": "Invalid product ID",
 		})
 		return
 	}

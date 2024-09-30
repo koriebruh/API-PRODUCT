@@ -23,7 +23,7 @@ func InitDB() *gorm.DB {
 		panic(errors.New("Failed Connected into data base"))
 	}
 
-	err = db.AutoMigrate(&domain.Product{})
+	err = db.AutoMigrate(&domain.Product{}, &domain.User{})
 	if err != nil {
 		panic(errors.New("Failed Migrated"))
 	}
@@ -37,7 +37,13 @@ func main() {
 	productService := service.NewProductService(productRepository, db)
 	productController := controller.NewProductController(productService)
 
+	authRepository := repository.NewAuthRepository(db)
+	authService := service.NewAuthService(db, authRepository)
+	authController := controller.NewAuthController(authService)
+
 	router := gin.Default()
+
+	router.POST("api/auth/register", authController.Register)
 
 	router.POST("api/products", productController.Create)
 	router.GET("api/products", productController.FindAll)
