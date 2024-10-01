@@ -1,14 +1,18 @@
 package service
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"jamal/api/config"
 	"jamal/api/helper"
 	"jamal/api/models/domain"
 	"jamal/api/models/web"
 	"jamal/api/repository"
 	"net/http"
+	"time"
 )
 
 type AuthServiceImpl struct {
@@ -73,29 +77,17 @@ func (service AuthServiceImpl) Register(ctx *gin.Context, register web.AuthReque
 func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogin) web.WebResponse {
 	var response web.WebResponse
 	err := service.DB.Transaction(func(tx *gorm.DB) error {
-		//<-- hash password
-		hashPsw, err := bcrypt.GenerateFromPassword([]byte(login.Password), bcrypt.DefaultCost)
-		if err != nil { // <-- response ketika gagal hash
-			response = web.WebResponse{
-				Code:   http.StatusInternalServerError,
-				Status: "InternalServerError",
-				Data: map[string]interface{}{
-					"Error": "Error Hash Password",
-				},
-			}
-			return nil
-		}
-		login.Password = string(hashPsw)
 
 		// <-- add adta format
 		requestLogin := domain.User{
-			Model:    gorm.Model{},
 			UserName: login.UserName,
 			Password: login.Password,
 			Name:     "",
 		}
 
-		err = service.AuthRepository.Login(tx, requestLogin)
+		fmt.Println("service ", requestLogin)
+
+		err := service.AuthRepository.Login(tx, requestLogin)
 		if err != nil { //<-- response ketika gagal create
 			response = web.WebResponse{
 				Code:   http.StatusBadRequest,
@@ -109,16 +101,36 @@ func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogi
 		response = web.WebResponse{
 			Code:   http.StatusOK,
 			Status: "OK",
-			Data:   "Register Success",
+			Data:   "Login Success",
 		}
 
-		//<-- Generate JWT TOKEN
-
 		return nil
-
 	})
-
 	helper.HandleErrorResponse(&response, err) // <-- ketika error transaction
+
+	//<-- Generate JWT TOKEN
+	expTime := time.Now().Add(time.Minute * 2) // <-- token kadaluarsa dalam 2min
+	claimToken := &config.JWTClaim{
+		UserName: login.UserName,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "king_jamal",
+			ExpiresAt: jwt.NewNumericDate(expTime),
+		},
+	}
+
+	// <-- generate algorithm yg akan di gunakan untuk login
+	tokenAlgo := jwt.NewWithClaims(jwt.SigningMethodHS256, claimToken)
+
+	// <-- sign token
+	token, err := tokenAlgo.SignedString([]byte(config.JWT_KEY))
+
+	// <-- set token ke cookie
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "token",
+		Path:     "/",
+		Value:    token,
+		HttpOnly: true,
+	})
 
 	return response
 }

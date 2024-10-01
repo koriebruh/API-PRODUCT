@@ -2,8 +2,10 @@ package repository
 
 import (
 	"errors"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"jamal/api/models/domain"
+	"log"
 )
 
 type AuthRepositoryImpl struct {
@@ -33,11 +35,22 @@ func (repository AuthRepositoryImpl) Register(tx *gorm.DB, user domain.User) err
 
 func (repository AuthRepositoryImpl) Login(tx *gorm.DB, user domain.User) error {
 	var dataDB domain.User
-	result := tx.Take(&dataDB, "user_name=? AND password=? ", user.UserName, user.Password).Error
-	if result != nil {
-		return errors.New("id Or password not wrong")
+	if err := tx.Take(&dataDB, "user_name=?", user.UserName).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("username atau password salah")
+		}
 	}
 
+	/*log.Print("Username: ", user.UserName)
+	log.Print("Stored Hashed Password: ", dataDB.Password)
+	log.Print("Input Password: ", user.Password)*/
+
+	// <-- data password di database yang sudah di-hash dibandingkan dengan password plaintext yang dikirim oleh user
+	err := bcrypt.CompareHashAndPassword([]byte(dataDB.Password), []byte(user.Password))
+	if err != nil {
+		return errors.New("username atau password salah")
+	}
+	log.Print("passworld", user.Password)
 	return nil
 }
 

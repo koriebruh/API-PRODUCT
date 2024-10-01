@@ -17,8 +17,8 @@ func NewAuthController(authService service.AuthService) AuthController {
 
 func (controller AuthControllerImpl) Register(c *gin.Context) {
 	// DECODE DARI JSON KE STRUCT
-	var registerProduct web.AuthRequestRegister
-	if err := c.ShouldBindJSON(&registerProduct); err != nil {
+	var registerUser web.AuthRequestRegister
+	if err := c.ShouldBindJSON(&registerUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "BAD REQUEST",
 			"message": "Invalid input data",
@@ -26,14 +26,25 @@ func (controller AuthControllerImpl) Register(c *gin.Context) {
 		return
 	}
 
-	registerResponse := controller.AuthService.Register(c, registerProduct)
+	registerResponse := controller.AuthService.Register(c, registerUser)
 
 	c.JSON(registerResponse.Code, registerResponse)
 }
 
 func (controller AuthControllerImpl) Login(c *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	// DECODE DARI JSON KE STRUCT
+	var LoginUser web.AuthRequestLogin
+	if err := c.ShouldBindJSON(&LoginUser); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  "BAD REQUEST",
+			"message": "Invalid input data",
+		})
+		return
+	}
+
+	logins := controller.AuthService.Login(c, LoginUser)
+
+	c.JSON(logins.Code, logins)
 }
 
 func (controller AuthControllerImpl) Logout(c *gin.Context) {

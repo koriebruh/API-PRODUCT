@@ -44,6 +44,7 @@ func main() {
 	router := gin.Default()
 
 	router.POST("api/auth/register", authController.Register)
+	router.POST("api/auth/login", authController.Login)
 
 	router.POST("api/products", productController.Create)
 	router.GET("api/products", productController.FindAll)

@@ -9,4 +9,13 @@ Content-Type: application/json
     "password":"admin123",
     "name":"admin ganteng"
 }
-###
+
+### POST LOGIN
+POST http://localhost:8080/api/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "user_name":"admin",
+  "password":"admin123"
+}
