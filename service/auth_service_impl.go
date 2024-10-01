@@ -136,6 +136,21 @@ func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogi
 }
 
 func (service AuthServiceImpl) Logout(ctx *gin.Context) web.WebResponse {
-	//TODO implement me
-	panic("implement me")
+	http.SetCookie(ctx.Writer, &http.Cookie{
+		Name:     "token",
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Now().Add(-time.Hour),
+		HttpOnly: true,
+	})
+
+	response := web.WebResponse{
+		Code:   http.StatusOK,
+		Status: "OK",
+		Data: map[string]interface{}{
+			"message": "Logout Success",
+		},
+	}
+
+	return response
 }

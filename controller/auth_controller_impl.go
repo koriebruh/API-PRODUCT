@@ -48,6 +48,8 @@ func (controller AuthControllerImpl) Login(c *gin.Context) {
 }
 
 func (controller AuthControllerImpl) Logout(c *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+
+	logins := controller.AuthService.Logout(c)
+
+	c.JSON(logins.Code, logins)
 }

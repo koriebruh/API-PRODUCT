@@ -1,13 +1,16 @@
-### POST register
+### TEST PROTEKSI ROOT APAKAH WORK?
+GET http://localhost:8080/api/products/3
+Accept: application/json
 
+### POST register
 POST http://localhost:8080/api/auth/register
 Accept: application/json
 Content-Type: application/json
 
 {
-    "user_name":"admin",
-    "password":"admin123",
-    "name":"admin ganteng"
+    "user_name":"korie",
+    "password":"korie123",
+    "name":"korie123"
 }
 
 ### POST LOGIN
@@ -19,3 +22,11 @@ Content-Type: application/json
   "user_name":"admin",
   "password":"admin123"
 }
+
+### TEST Akses sub route
+GET http://localhost:8080/api/products
+
+### LOGOUT
+POST http://localhost:8080/api/auth/logout
+Accept: application/json
+Content-Type: application/json

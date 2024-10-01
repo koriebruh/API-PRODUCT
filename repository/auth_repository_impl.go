@@ -53,8 +53,3 @@ func (repository AuthRepositoryImpl) Login(tx *gorm.DB, user domain.User) error 
 	log.Print("passworld", user.Password)
 	return nil
 }
-
-func (repository AuthRepositoryImpl) Logout(tx *gorm.DB, user domain.User) error {
-	//TODO implement me
-	panic("implement me")
-}
