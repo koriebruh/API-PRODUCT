@@ -7,17 +7,18 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"jamal/api/config"
-	"jamal/api/controller"
-	"jamal/api/models/domain"
-	"jamal/api/repository"
-	"jamal/api/service"
+	"jamal/api/api/config"
+	controller2 "jamal/api/api/controller"
+	domain2 "jamal/api/api/models/domain"
+	repository2 "jamal/api/api/repository"
+	service2 "jamal/api/api/service"
 	"log"
 	"net/http"
 )
 
 func InitDB() *gorm.DB {
-	dsn := "root:korie123@tcp(127.0.0.1:3306)/api_product?charset=utf8mb4&parseTime=True&loc=Local"
+	//dsn := "root:korie123@tcp(127.0.0.1:3306)/api_product?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:korie123@tcp(mysql-data:3306)/api_product?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
@@ -26,7 +27,7 @@ func InitDB() *gorm.DB {
 		panic(errors.New("Failed Connected into data base"))
 	}
 
-	err = db.AutoMigrate(&domain.Product{}, &domain.User{})
+	err = db.AutoMigrate(&domain2.Product{}, &domain2.User{})
 	if err != nil {
 		panic(errors.New("Failed Migrated"))
 	}
@@ -67,13 +68,13 @@ func AuthMiddleware() gin.HandlerFunc {
 
 func main() {
 	db := InitDB()
-	productRepository := repository.NewProductRepository(db)
-	productService := service.NewProductService(productRepository, db)
-	productController := controller.NewProductController(productService)
+	productRepository := repository2.NewProductRepository(db)
+	productService := service2.NewProductService(productRepository, db)
+	productController := controller2.NewProductController(productService)
 
-	authRepository := repository.NewAuthRepository(db)
-	authService := service.NewAuthService(db, authRepository)
-	authController := controller.NewAuthController(authService)
+	authRepository := repository2.NewAuthRepository(db)
+	authService := service2.NewAuthService(db, authRepository)
+	authController := controller2.NewAuthController(authService)
 
 	router := gin.Default()
 

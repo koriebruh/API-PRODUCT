@@ -6,11 +6,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"jamal/api/config"
-	"jamal/api/helper"
-	"jamal/api/models/domain"
-	"jamal/api/models/web"
-	"jamal/api/repository"
+	"jamal/api/api/config"
+	"jamal/api/api/helper"
+	"jamal/api/api/models/domain"
+	web2 "jamal/api/api/models/web"
+	"jamal/api/api/repository"
 	"net/http"
 	"time"
 )
@@ -27,13 +27,13 @@ func NewAuthService(db *gorm.DB, authRepository repository.AuthRepository) AuthS
 	}
 }
 
-func (service AuthServiceImpl) Register(ctx *gin.Context, register web.AuthRequestRegister) web.WebResponse {
-	var response web.WebResponse
+func (service AuthServiceImpl) Register(ctx *gin.Context, register web2.AuthRequestRegister) web2.WebResponse {
+	var response web2.WebResponse
 	err := service.DB.Transaction(func(tx *gorm.DB) error {
 		//<-- hash password
 		hashPsw, err := bcrypt.GenerateFromPassword([]byte(register.Password), bcrypt.DefaultCost)
 		if err != nil { // <-- response ketika gagal hash
-			response = web.WebResponse{
+			response = web2.WebResponse{
 				Code:   http.StatusInternalServerError,
 				Status: "InternalServerError",
 				Data: map[string]interface{}{
@@ -53,7 +53,7 @@ func (service AuthServiceImpl) Register(ctx *gin.Context, register web.AuthReque
 
 		err = service.AuthRepository.Register(tx, registerData)
 		if err != nil { //<-- response ketika gagal create
-			response = web.WebResponse{
+			response = web2.WebResponse{
 				Code:   http.StatusBadRequest,
 				Status: "BAD REQUEST",
 				Data:   err.Error(),
@@ -62,7 +62,7 @@ func (service AuthServiceImpl) Register(ctx *gin.Context, register web.AuthReque
 		}
 
 		//<-- response sukses
-		response = web.WebResponse{
+		response = web2.WebResponse{
 			Code:   http.StatusOK,
 			Status: "OK",
 			Data:   "Register Success",
@@ -74,8 +74,8 @@ func (service AuthServiceImpl) Register(ctx *gin.Context, register web.AuthReque
 	return response
 }
 
-func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogin) web.WebResponse {
-	var response web.WebResponse
+func (service AuthServiceImpl) Login(ctx *gin.Context, login web2.AuthRequestLogin) web2.WebResponse {
+	var response web2.WebResponse
 	err := service.DB.Transaction(func(tx *gorm.DB) error {
 
 		// <-- add adta format
@@ -89,7 +89,7 @@ func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogi
 
 		err := service.AuthRepository.Login(tx, requestLogin)
 		if err != nil { //<-- response ketika gagal create
-			response = web.WebResponse{
+			response = web2.WebResponse{
 				Code:   http.StatusBadRequest,
 				Status: "BAD REQUEST",
 				Data:   err.Error(),
@@ -98,7 +98,7 @@ func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogi
 		}
 
 		//<-- response sukses
-		response = web.WebResponse{
+		response = web2.WebResponse{
 			Code:   http.StatusOK,
 			Status: "OK",
 			Data:   "Login Success",
@@ -135,7 +135,7 @@ func (service AuthServiceImpl) Login(ctx *gin.Context, login web.AuthRequestLogi
 	return response
 }
 
-func (service AuthServiceImpl) Logout(ctx *gin.Context) web.WebResponse {
+func (service AuthServiceImpl) Logout(ctx *gin.Context) web2.WebResponse {
 	http.SetCookie(ctx.Writer, &http.Cookie{
 		Name:     "token",
 		Value:    "",
@@ -144,7 +144,7 @@ func (service AuthServiceImpl) Logout(ctx *gin.Context) web.WebResponse {
 		HttpOnly: true,
 	})
 
-	response := web.WebResponse{
+	response := web2.WebResponse{
 		Code:   http.StatusOK,
 		Status: "OK",
 		Data: map[string]interface{}{

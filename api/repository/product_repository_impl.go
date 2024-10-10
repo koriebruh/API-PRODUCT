@@ -4,7 +4,7 @@ import (
 	"errors"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
-	"jamal/api/models/domain"
+	"jamal/api/api/models/domain"
 )
 
 type ProductRepositoryImpl struct {

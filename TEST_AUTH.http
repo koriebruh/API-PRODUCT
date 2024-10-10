@@ -19,8 +19,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "user_name":"admin",
-  "password":"admin123"
+  "user_name":"korie",
+  "password":"korie123"
 }
 
 ### TEST Akses sub route

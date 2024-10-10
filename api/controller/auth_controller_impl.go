@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"jamal/api/models/web"
-	"jamal/api/service"
+	web2 "jamal/api/api/models/web"
+	"jamal/api/api/service"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ func NewAuthController(authService service.AuthService) AuthController {
 
 func (controller AuthControllerImpl) Register(c *gin.Context) {
 	// DECODE DARI JSON KE STRUCT
-	var registerUser web.AuthRequestRegister
+	var registerUser web2.AuthRequestRegister
 	if err := c.ShouldBindJSON(&registerUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "BAD REQUEST",
@@ -33,7 +33,7 @@ func (controller AuthControllerImpl) Register(c *gin.Context) {
 
 func (controller AuthControllerImpl) Login(c *gin.Context) {
 	// DECODE DARI JSON KE STRUCT
-	var LoginUser web.AuthRequestLogin
+	var LoginUser web2.AuthRequestLogin
 	if err := c.ShouldBindJSON(&LoginUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "BAD REQUEST",

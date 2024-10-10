@@ -1,6 +1,8 @@
 package web
 
-import "jamal/api/models/domain"
+import (
+	"jamal/api/api/models/domain"
+)
 
 // MEMBATASI DATA YANG DI BAGIKAN KE USER
 

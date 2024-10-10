@@ -4,7 +4,7 @@ import (
 	"errors"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"jamal/api/models/domain"
+	"jamal/api/api/models/domain"
 	"log"
 )
 

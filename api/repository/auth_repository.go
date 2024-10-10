@@ -2,7 +2,7 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	"jamal/api/models/domain"
+	"jamal/api/api/models/domain"
 )
 
 type AuthRepository interface {

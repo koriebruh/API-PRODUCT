@@ -2,8 +2,8 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"jamal/api/models/web"
-	"jamal/api/service"
+	web2 "jamal/api/api/models/web"
+	"jamal/api/api/service"
 	"net/http"
 	"strconv"
 )
@@ -20,7 +20,7 @@ func NewProductController(productService service.ProductService) *ProductControl
 
 func (controller ProductControllerImpl) Create(c *gin.Context) {
 	// DECODE DARI JSON KE STRUCT
-	var createProduct web.ProductCreate
+	var createProduct web2.ProductCreate
 	if err := c.ShouldBindJSON(&createProduct); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "BAD REQUEST",
@@ -64,7 +64,7 @@ func (controller ProductControllerImpl) Update(c *gin.Context) {
 	}
 
 	// DECODE DARI JSON KE STRUCT
-	var updateProduct web.ProductUpdate
+	var updateProduct web2.ProductUpdate
 	if err = c.ShouldBindJSON(&updateProduct); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  "BAD REQUEST",

@@ -1,6 +1,8 @@
 package helper
 
-import "jamal/api/models/web"
+import (
+	"jamal/api/api/models/web"
+)
 
 func HandleErrorResponse(response *web.WebResponse, err error) {
 	if err != nil {
