@@ -19,9 +19,29 @@ services:
     image: koriebruh/apitest
     restart: always
     ports:
-      - "8080:8080"
+      - "8081:8080"
     depends_on:
       - mysql-data
+
+  api-bg2:
+      container_name: api-bg2
+      image: koriebruh/apitest
+      restart: always
+      ports:
+        - "8082:8080"
+      depends_on:
+        - mysql-data
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api-bg
+      - api-bg2
 
 volumes:
   mysql-product:

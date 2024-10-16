@@ -1,16 +1,8 @@
-docker compose build
-docker compose create
-docker compose start
-docker compose down
-
-docker compose down --rmi all
-
-
-
+#step to use
 docker build -t koriebruh/apitest .
 
-docker images #size lebih kecil cek
+docker compose create
+docker compose start
+docker compose stop
 
-docker container create --name api1 -p 8080:8080 koriebruh/apitest
-
-docker start api1
+docker compose down --rmi all
