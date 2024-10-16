@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/driver/mysql"
@@ -14,6 +15,7 @@ import (
 	service2 "jamal/api/api/service"
 	"log"
 	"net/http"
+	"time"
 )
 
 func InitDB() *gorm.DB {
@@ -77,6 +79,16 @@ func main() {
 	authController := controller2.NewAuthController(authService)
 
 	router := gin.Default()
+
+	// CORS configuration
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5174"}, // Change to your frontend URL
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	router.POST("api/auth/login", authController.Login)
 	router.POST("api/auth/logout", authController.Logout)
